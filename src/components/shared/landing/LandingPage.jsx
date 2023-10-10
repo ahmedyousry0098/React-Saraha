@@ -7,6 +7,7 @@ function LandingPage() {
     const navigate = useNavigate()
 
     useEffect(() => {
+        console.log('landing page')
         if (checkIfLoggedIn()) {
             navigate('/home')
         } else {

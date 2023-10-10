@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import axios from 'axios'
 import {useFormik} from 'formik'
 import {Link, useNavigate} from 'react-router-dom'
@@ -31,21 +31,25 @@ function Login() {
         onSubmit: async (values) => {
             setIsLoading(true)
             await axios.post(`${apiConfig.BASE_URL}/user/signin`, values).then((response) => {
-              if (response.status == 200) {
-                const status = login(response.data.token)
-                if (!status) return setErrMsg('in-valid token')
-                navigate('/home')
-              }
+                if (response.status == 200) {
+                    const status = login(response.data.token)
+                    if (!status) return setErrMsg('in-valid token')
+                    navigate('/home')
+                }
             }).catch(err => {
-              setErrMsg(err.message);
-              setTimeout(() => {
-                setErrMsg('')
-              }, 5000)
+                setErrMsg(err.message);
+                setTimeout(() => {
+                    setErrMsg('')
+                }, 5000)
             }).finally(() => {
-              setIsLoading(false)
+                setIsLoading(false)
             })            
         }
     })
+
+    useEffect(() => {
+        
+    }, [])
 
     return (
         <div className="container text-center my-5">

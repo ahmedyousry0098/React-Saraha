@@ -25,18 +25,17 @@ function AuthContextProvider({children}) {
             return false
         } 
         localStorage.setItem('token', token)
-        dispatch({type: 'login', payload: decode})
+        dispatch({type: 'login', payload: {...decode, token}})
         return true
     }
 
     const checkIfLoggedIn = () => {
         const token = localStorage.getItem('token')
-        console.log({token});
         if (!token) return false
         const decode = jwtDecode(token)
         console.log({decode});
         if (!decode?.id) return false
-        dispatch({type: 'login', payload: decode})
+        dispatch({type: 'login', payload: {...decode, token}})
         return true
     }
 

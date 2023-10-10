@@ -6,7 +6,7 @@ function RouteGuard({children}) {
 
     const {state: {isLoggedIn}} = useContext(AuthContext)
 
-    return isLoggedIn ? <>
+    return localStorage.getItem('token') ? <>
         {children}
     </> : <Navigate to={'/login'} />
     

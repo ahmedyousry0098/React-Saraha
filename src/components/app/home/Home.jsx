@@ -1,8 +1,13 @@
 import React from 'react'
+import Profile from '../profile/Profile'
+import Messages from '../messages/Messages'
 
 function Home() {
   return (
-    <div>Home</div>
+    <div>
+      <Profile />
+      <Messages />
+    </div>
   )
 }
 

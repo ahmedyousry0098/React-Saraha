@@ -1,19 +1,32 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import { AuthContext } from '../../../context/AuthContext'
+import anonymousIcon from '../../../imgs/avatar.png'
+import './Profile.css'
+import SharedLink from '../modal/SharedLink'
 
-function Profile() {
+function Profile({showShareBtn=true}) {
 
+    const [showModal, setShowModal] = useState(false)
     const {state} = useContext(AuthContext)
 
     return (
-        <div class="container text-center py-5 my-5 text-center">
-            <div class="card pt-5">
-                <a href="" data-toggle="modal" data-target="#profile">
-                    <img src="img/avatar.png" className="avatar" alt="" />
-                </a>
-                <h3 class="py-2">{state.name}</h3>
-                <button data-toggle="modal" data-target="#share" class="btn btn-default-outline share "><i class="fas fa-share-alt"></i>  Share Profile</button>
+        <div className="container text-center py-3 my-3 text-center rounded">
+            <div className="card pt-1">
+                <div className='text-center'>
+                    <img src="https://cdn.icon-icons.com/icons2/3906/PNG/512/anonymous_icon_246670.png" className="avatar" alt="" />
+                </div>
+                
+                <h3 className="py-2">{state.name}</h3>
+                {showShareBtn  && <button data-toggle="modal" data-target="#share" class="btn btn-outline-dark w-25 d-block mx-auto mb-3" onClick={() => setShowModal(true)}>
+                    <i class="fa-solid fa-share me-2"></i>
+                    <span>Share Profile</span>
+                </button>}
             </div>
+            <SharedLink
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                sharedLink={"http://localhost:3000/sendmessage/" + state.id}
+            />
         </div>
     )
 }

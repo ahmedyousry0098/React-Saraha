@@ -1,5 +1,6 @@
 import React, {createContext, useReducer} from 'react'
 import jwtDecode from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 
 export const AuthContext = createContext()
 
@@ -25,9 +26,26 @@ function AuthContextProvider({children}) {
         } 
         localStorage.setItem('token', token)
         dispatch({type: 'login', payload: decode})
+        return true
     }
 
-    return <AuthContext.Provider value={{state, login}}>
+    const checkIfLoggedIn = () => {
+        const token = localStorage.getItem('token')
+        console.log({token});
+        if (!token) return false
+        const decode = jwtDecode(token)
+        console.log({decode});
+        if (!decode?.id) return false
+        dispatch({type: 'login', payload: decode})
+        return true
+    }
+
+    const logOut = () => {
+        localStorage.removeItem('token')
+        dispatch({type: 'logout'})
+    }
+
+    return <AuthContext.Provider value={{state, login, checkIfLoggedIn, logOut}}>
         {children}
     </AuthContext.Provider>
 }

@@ -34,7 +34,7 @@ function Login() {
               if (response.status == 200) {
                 const status = login(response.data.token)
                 if (!status) return setErrMsg('in-valid token')
-                navigate('/homes')
+                navigate('/home')
               }
             }).catch(err => {
               setErrMsg(err.message);

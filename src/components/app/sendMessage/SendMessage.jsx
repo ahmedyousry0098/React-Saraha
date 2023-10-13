@@ -7,13 +7,15 @@ import axios from 'axios'
 import { apiConfig } from '../../../constants/api'
 import { useParams } from 'react-router-dom'
 import { AuthContext } from '../../../context/AuthContext'
+import { sendMessage } from '../../../redux/messages.slice'
+import { useDispatch, useSelector } from 'react-redux'
 
 function SendMessage() {
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [response, setResponse] = useState('')
     const {state} = useContext(AuthContext)
     const {id} = useParams()
+    const dispatch = useDispatch()
+    const messagesStore = useSelector((state => state.messages))
 
     const formik = useFormik({
         initialValues: {
@@ -23,24 +25,8 @@ function SendMessage() {
             message: yup.string().max(2000, 'message is too long').min(3, 'message is too short')
         }),
         onSubmit: async (values) => {
-            console.log('hi sharks');
-            setIsLoading(true)
-            await axios.post(`${apiConfig.BASE_URL}/message`, {
-                messageContent: values.message,
-                receivedId: id
-            }).then((response) => {
-                console.log(response);
-            }).catch((err) => {
-                console.log(err);
-                setResponse(err.message)
-            }).finally(() => {
-                setIsLoading(false)
-            })
+            dispatch(sendMessage(values, id))
         }   
-    })
-
-    useEffect(() => {
-
     })
 
     return (
@@ -62,9 +48,9 @@ function SendMessage() {
                             <p className='p-0 m-0'>{formik.errors.message}</p>
                         </div>
                     }
-                    <button type="submit" class='btn btn-outline-success my-3'> 
+                    <button type="submit" className='btn btn-outline-success my-3'> 
                         {
-                            isLoading ? <div className="d-flex justify-content-center">
+                            messagesStore.loading ? <div className="d-flex justify-content-center">
                                 <div className="spinner-border" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
@@ -74,8 +60,8 @@ function SendMessage() {
                     </button>
                 </form>
                 {
-                    response && <div className='alert alert-danger position-absolute start-0' style={{bottom: -100}}>
-                        <p className='text-center'>{response}</p>  
+                    messagesStore.errResponse && <div className='alert alert-danger position-absolute start-0' style={{bottom: -100}}>
+                        <p className='text-center'>{messagesStore.errResponse}</p>  
                     </div>
                 }
             </div>

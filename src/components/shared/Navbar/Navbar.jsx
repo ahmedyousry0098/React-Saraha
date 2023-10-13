@@ -7,7 +7,6 @@ import sarahaLogo from '../../../imgs/logo300.png'
 function Navbar() {
 
     const {state: {isLoggedIn}, logOut} = useContext(AuthContext)
-    console.log('navbar', {isLoggedIn});
 
     return (
         <nav className="navbar shadow-lg py-2">

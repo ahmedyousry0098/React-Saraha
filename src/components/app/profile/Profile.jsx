@@ -17,8 +17,8 @@ function Profile({showShareBtn=true}) {
                 </div>
                 
                 <h3 className="py-2">{state.name}</h3>
-                {showShareBtn  && <button data-toggle="modal" data-target="#share" class="btn btn-outline-dark w-25 d-block mx-auto mb-3" onClick={() => setShowModal(true)}>
-                    <i class="fa-solid fa-share me-2"></i>
+                {showShareBtn  && <button data-toggle="modal" data-target="#share" className="btn btn-outline-dark w-25 d-block mx-auto mb-3" onClick={() => setShowModal(true)}>
+                    <i className="fa-solid fa-share me-2"></i>
                     <span>Share Profile</span>
                 </button>}
             </div>

@@ -1,24 +1,22 @@
-import axios from 'axios'
-import React, {useContext, useState} from 'react'
-import {apiConfig} from '../../../constants/api'
-import { AuthContext } from '../../../context/AuthContext'
-import { useQuery } from 'react-query'
+import React, { useEffect, useState } from 'react'
 import MessageCard from '../messageCard/MessageCard'
-import SharedLink from '../modal/SharedLink'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchMessages } from '../../../redux/messages.slice'
 
 function Messages() {
-
-    const {state} = useContext(AuthContext)
-
-    const { isLoading, error, data } = useQuery('repoData', () => {
-        return axios.get(`${apiConfig.BASE_URL}/message`, {
-            headers: {
-                token: state.token
-            }
-        }) 
+    
+    const dispatch = useDispatch()
+    const state = useSelector((state) => {
+        return state.messages
     })
 
-    if (isLoading) {
+    useEffect(() => {
+        dispatch(fetchMessages())
+    }, [])    
+
+    console.log(state);
+
+    if (state.loading) {
         return <div className="d-flex justify-content-center">
             <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -26,13 +24,7 @@ function Messages() {
         </div>
     }
 
-    if (error) {
-        return <div className="d-flex justify-content-center">
-            <p className='text-center'>{error}</p>
-        </div>
-    }
-    
-    if (!data?.allMessages) {
+    if (!state.messages.length) {
         return <div className="container text-center my-5 text-center">
             <div className="row">
                 <div className="col-md-12">
@@ -43,14 +35,14 @@ function Messages() {
             </div>
         </div>
     }
-    
+
     return (
         <div className='row align-items-center'>
-            {data.allMessages.map((msg,index) => {
+            {state.messages.map((msg) => {
                 return <>
                     <MessageCard 
-                        key={index}
-                        msg={msg}
+                        key={msg._id}
+                        msg={msg.messageContent}
                     />
                 </>
             })}
